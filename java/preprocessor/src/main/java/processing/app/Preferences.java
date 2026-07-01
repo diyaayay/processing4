@@ -21,11 +21,6 @@
 
 package processing.app;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.util.Properties;
-
 /**
  * Storage class for user preferences and environment settings.
  * <P>
@@ -45,15 +40,11 @@ import java.util.Properties;
 public class Preferences {
     static public String get(String attribute /*, String defaultValue */) {
         try {
-            var settingsFile = Base.getSettingsFile("preferences.txt");
-            var reader = new BufferedReader(new FileReader(settingsFile));
-
-            var settings = new Properties();
-            settings.load(reader);
-            reader.close();
-
-            return settings.getProperty(attribute);
-        }catch (Exception e) {
+            if (!processing.utils.Preferences.isInitialized()) {
+                processing.utils.Preferences.init();
+            }
+            return processing.utils.Preferences.get(attribute);
+        } catch (Exception e) {
             return null;
         }
     }
